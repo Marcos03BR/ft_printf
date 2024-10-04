@@ -6,7 +6,7 @@
 /*   By: mbarranq <mbarranq@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 17:58:48 by mbarranq          #+#    #+#             */
-/*   Updated: 2024/10/04 13:31:46 by mbarranq         ###   ########.fr       */
+/*   Updated: 2024/10/04 13:43:13 by mbarranq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	ft_format(const char *format, va_list args)
 	else if (*format == 's')
 		count += ft_putstr(va_arg(args, char *));
 	else if (*format == 'p')
-		count += ft_putptr(va_arg(args, unsigned long long));
+		count += ft_putptr(va_arg(args, void *));
 	else if (*format == 'd' || *format == 'i')
 		count += ft_putnbr(va_arg(args, int));
 	else if (*format == 'u')
