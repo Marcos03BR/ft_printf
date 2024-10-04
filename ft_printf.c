@@ -6,60 +6,61 @@
 /*   By: mbarranq <mbarranq@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 17:58:48 by mbarranq          #+#    #+#             */
-/*   Updated: 2024/10/03 18:38:29 by mbarranq         ###   ########.fr       */
+/*   Updated: 2024/10/04 13:31:46 by mbarranq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include "libft/libft.h"
 
-static void	ft_format(int i, const char *format, va_list args);
+static int	ft_format(const char *format, va_list args);
 
 int	ft_printf(const char *format, ...)
 {
 	va_list	args;
 	int		i;
 	int		count;
+	int		temp_count;
 
 	va_start(args, format);
 	i = 0;
 	count = 0;
 	while (format[i])
 	{
-		if (format[i] == '%')
+		if (format[i] == '%' && format[++i])
 		{
-			i++;
-			ft_format(i, format, args);
+			temp_count = ft_format(&format[i], args);
+			if (temp_count == -1)
+				return (-1);
+			count += temp_count;
 		}
 		else
-		{
-			ft_putchar(format[i]);
-			count++;
-			i++;
-		}
+			count += ft_putchar(format[i]);
+		i++;
 	}
 	va_end(args);
 	return (count);
 }
 
-static void	ft_format(int i, const char *format, va_list args)
+static int	ft_format(const char *format, va_list args)
 {
-	if (format[i] == 'c')
-		ft_putchar(va_arg(args, int));
-	else if (format[i] == 's')
-		ft_putstr(va_arg(args, char *));
-	else if (format[i] == 'p')
-		ft_putnbr(va_arg(args, int));
-/*	else if (format[i] == 'd')
-		ft_puthex(va_arg(args, unsigned int));
-	else if (format[i] == 'i')
-		ft_puthex(va_arg(args, unsigned int));
-	else if (format[i] == 'u')
-		ft_putptr(va_arg(args, void *));*/
-	else if (format[i] == 'x')
-		ft_putchar('%');
-	else if (format[i] == 'X')
-		ft_putchar('%');
-	else if (format[i] == '%')
-		ft_putchar('%');
+	int	count;
+
+	count = 0;
+	if (*format == 'c')
+		count += ft_putchar(va_arg(args, int));
+	else if (*format == 's')
+		count += ft_putstr(va_arg(args, char *));
+	else if (*format == 'p')
+		count += ft_putptr(va_arg(args, unsigned long long));
+	else if (*format == 'd' || *format == 'i')
+		count += ft_putnbr(va_arg(args, int));
+	else if (*format == 'u')
+		count += ft_putunsigned(va_arg(args, unsigned int));
+	else if (*format == 'x' || *format == 'X')
+		count += ft_puthex(va_arg(args, unsigned int), *format);
+	else if (*format == '%')
+		count += ft_putchar('%');
+	else
+		return (-1);
+	return (count);
 }

@@ -1,19 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putchar.c                                       :+:      :+:    :+:   */
+/*   ft_putunsigned.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbarranq <mbarranq@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/03 18:22:28 by mbarranq          #+#    #+#             */
-/*   Updated: 2024/10/04 13:31:42 by mbarranq         ###   ########.fr       */
+/*   Created: 2024/10/04 12:25:41 by mbarranq          #+#    #+#             */
+/*   Updated: 2024/10/04 13:31:28 by mbarranq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_putchar(char c)
+int	ft_putunsigned(unsigned int nb)
 {
-	write(1, &c, 1);
-	return (1);
+	int		count;
+	char	c;
+
+	count = 0;
+	if (nb >= 10)
+	{
+		count += ft_putunsigned(nb / 10);
+		count += ft_putunsigned(nb % 10);
+	}
+	else
+	{
+		c = nb + '0';
+		count += ft_putchar(c);
+	}
+	return (count);
 }
